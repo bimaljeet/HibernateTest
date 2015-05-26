@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+
+    <bean id="compassSessionFactory" class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+        <property name="dataSource" ref="compassOracleDs"/>
+        <property name="mappingResources" ref="csDaoHibernateMappings"/>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.default_schema">addressbook</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hibernate.format_sql">true</prop>
+                <prop key="hibernate.use_sql_comments">false</prop>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+            </props>
+        </property>
+    </bean>
+
+    <util:list id="csDaoHibernateMappings">
+        <value>com/dao/cs/dbo/Employee.hbm.xml</value>
+        <value>com/dao/cs/dbo/AddressbookQuries.hbm.xml</value>
+    </util:list>
+
+
+    <bean id="compassOracleDs" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+        <property name="driverClass">
+            <value>com.mysql.jdbc.Driver</value>
+        </property>
+
+        <property name="jdbcUrl">
+            <value>jdbc:mysql://localhost:3306/addressbook</value>
+        </property>
+
+        <property name="user">
+            <value>root</value>
+        </property>
+
+        <property name="password">
+            <value>cherthala</value>
+        </property>
+
+        <property name="initialPoolSize">
+            <value>5</value>
+        </property>
+
+        <property name="minPoolSize">
+            <value>5</value>
+        </property>
+
+        <property name="maxPoolSize">
+            <value>50</value>
+        </property>
+
+    </bean>
+
+    <bean id="hibernateTestWithSpring" class="com.hibernateTest.HibernateTestWithSpring">
+        <property name="factory" ref="compassSessionFactory" />
+    </bean>
+</beans>
